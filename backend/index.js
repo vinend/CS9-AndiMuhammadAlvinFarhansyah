@@ -15,7 +15,7 @@ const port = process.env.PORT || 3000;
 // Middleware
 app.use(cors({
   origin: [
-    'https://cs-9-andi-muhammad-alvin-farhansyah.vercel.app',
+    'cs-9-andi-muhammad-alvin-farhansyah-8ixwyzw4h.vercel.app',
     'https://os.netlabdte.com', 
     'http://localhost:5173', 
     'http://localhost:3000'
