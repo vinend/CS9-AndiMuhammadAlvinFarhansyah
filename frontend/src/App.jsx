@@ -37,7 +37,13 @@ function App() {
 
   const fetchUserData = async (email) => {
     try {
-      const response = await fetch(`${config.apiUrl}/user/${email}`);
+      const response = await fetch(config.createApiUrl(`user/${email}`), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
       
       if (!response.ok) {
         throw new Error('Failed to fetch user data');

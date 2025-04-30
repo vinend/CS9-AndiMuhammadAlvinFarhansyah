@@ -37,9 +37,15 @@ const StoresPage = ({ user, onAddToCart }) => {
   const fetchStores = async () => {
     try {
       setLoading(true);
-      const baseUrl = config.apiUrl;
       
-      const response = await fetch(`${baseUrl}/store/getAll`);
+      const response = await fetch(config.createApiUrl('store/getAll'), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
       if (!response.ok) {
         throw new Error('Failed to fetch stores');
       }
@@ -67,9 +73,15 @@ const StoresPage = ({ user, onAddToCart }) => {
   const fetchStoreItems = async (storeId) => {
     try {
       setLoading(true);
-      const baseUrl = config.apiUrl;
       
-      const response = await fetch(`${baseUrl}/item/byStoreId/${storeId}`);
+      const response = await fetch(config.createApiUrl(`item/byStoreId/${storeId}`), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
       if (!response.ok) {
         throw new Error('Failed to fetch store items');
       }

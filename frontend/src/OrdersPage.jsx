@@ -16,9 +16,15 @@ const OrdersPage = ({ user }) => {
   const fetchUserOrders = async (userId) => {
     try {
       setLoading(true);
-      const baseUrl = config.apiUrl;
       
-      const response = await fetch(`${baseUrl}/transaction/user/${userId}`);
+      const response = await fetch(config.createApiUrl(`transaction/user/${userId}`), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
       if (!response.ok) {
         throw new Error('Failed to fetch orders');
       }
@@ -36,7 +42,9 @@ const OrdersPage = ({ user }) => {
         try {
           // Fetch item details if not included
           if (!order.item) {
-            const itemResponse = await fetch(`${baseUrl}/item/byId/${order.item_id}`);
+            const itemResponse = await fetch(config.createApiUrl(`item/byId/${order.item_id}`), {
+              credentials: 'include'
+            });
             const itemData = await itemResponse.json();
             if (itemData.success) {
               order.item = itemData.payload;

@@ -16,56 +16,69 @@ const MyItemsPage = ({ user }) => {
   const fetchUserItems = async (userId) => {
     try {
       setLoading(true);
-      const baseUrl = config.apiUrl;
       
       // First get the user's transactions
-      const response = await fetch(`${baseUrl}/transaction/user/${userId}`);
+      const response = await fetch(config.createApiUrl(`transaction/user/${userId}`), {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
       if (!response.ok) {
-        throw new Error('Failed to fetch transactions');
+        throw new Error('Failed to fetch user transactions');
       }
       
       const data = await response.json();
       if (!data.success) {
-        throw new Error(data.message || 'Failed to fetch transactions');
+        throw new Error(data.message || 'Failed to fetch user transactions');
       }
       
-      // Filter to only paid transactions
-      const paidTransactions = data.payload.filter(tx => tx.status === 'paid');
+      // Filter only paid transactions
+      const paidTransactions = data.payload.filter(transaction => transaction.status === 'paid');
       
-      // Extract unique item IDs
-      const itemIds = [...new Set(paidTransactions.map(tx => tx.item_id))];
+      // Extract all unique item IDs
+      const itemIds = [...new Set(paidTransactions.map(transaction => transaction.item_id))];
       
       // Fetch details for each item
       const itemDetailsPromises = itemIds.map(async (itemId) => {
         try {
-          const itemResponse = await fetch(`${baseUrl}/item/byId/${itemId}`);
+          const itemResponse = await fetch(config.createApiUrl(`item/byId/${itemId}`), {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include'
+          });
+          
+          if (!itemResponse.ok) {
+            throw new Error(`Failed to fetch item details for ID: ${itemId}`);
+          }
+          
           const itemData = await itemResponse.json();
           
-          if (itemData.success) {
-            // Find all transactions for this item to calculate quantity owned
-            const itemTransactions = paidTransactions.filter(tx => tx.item_id === itemId);
-            const quantityOwned = itemTransactions.reduce((sum, tx) => sum + tx.quantity, 0);
-            
-            // Return item with quantity information
-            return {
-              ...itemData.payload,
-              quantityOwned,
-              purchaseDate: new Date(Math.max(...itemTransactions.map(tx => new Date(tx.created_at)))),
-            };
+          if (!itemData.success) {
+            throw new Error(itemData.message || `Failed to fetch item details for ID: ${itemId}`);
           }
-          return null;
+          
+          // Calculate total quantity from all transactions for this item
+          const totalQuantity = paidTransactions
+            .filter(transaction => transaction.item_id === itemId)
+            .reduce((sum, transaction) => sum + transaction.quantity, 0);
+          
+          return {
+            ...itemData.payload,
+            quantity: totalQuantity,
+            transactions: paidTransactions.filter(transaction => transaction.item_id === itemId)
+          };
         } catch (err) {
-          console.error(`Error fetching details for item ${itemId}:`, err);
+          console.error(`Error fetching item details for ID ${itemId}:`, err);
           return null;
         }
       });
       
-      // Wait for all item details to be fetched
       const itemDetails = (await Promise.all(itemDetailsPromises)).filter(Boolean);
-      
-      // Sort by most recent purchase first
-      itemDetails.sort((a, b) => b.purchaseDate - a.purchaseDate);
-      
       setItems(itemDetails);
       setLoading(false);
     } catch (err) {

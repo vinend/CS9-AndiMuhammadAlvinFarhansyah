@@ -17,12 +17,10 @@ const AuthPage = ({ onLogin }) => {
     setError('');
 
     try {
-      // Building the URL properly with URL constructor
-      const baseUrl = config.apiUrl;
-      const endpoint = isLogin ? '/user/login' : '/user/register'; 
+      const endpoint = isLogin ? 'user/login' : 'user/register';
       
-      // Create the base URL
-      const url = new URL(endpoint, baseUrl);
+      // Create URL object for query parameters
+      const url = new URL(config.createApiUrl(endpoint));
       
       // Add query parameters
       if (isLogin) {
@@ -39,6 +37,7 @@ const AuthPage = ({ onLogin }) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include'
       });
 
       const result = await response.json();

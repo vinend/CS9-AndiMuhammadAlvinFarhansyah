@@ -22,11 +22,8 @@ const TopUpPage = ({ user, onBalanceUpdate, onClose }) => {
     }
 
     try {
-      const baseUrl = config.apiUrl;
-      const endpoint = '/user/topUp';
-      
-      // Create URL with query parameters as required by the backend
-      let url = new URL(baseUrl + endpoint);
+      // Create URL with query parameters
+      const url = new URL(config.createApiUrl('user/topUp'));
       url.searchParams.append('id', user.id);
       url.searchParams.append('amount', numAmount);
       
@@ -35,6 +32,7 @@ const TopUpPage = ({ user, onBalanceUpdate, onClose }) => {
         headers: {
           'Content-Type': 'application/json',
         },
+        credentials: 'include'
       });
 
       const result = await response.json();
