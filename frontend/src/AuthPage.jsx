@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import NetlabStoreLogo from './assets/NetlabStore.svg';
 import LoginButton from './assets/Login-Button.svg';
+import config from './config';
 
 const AuthPage = ({ onLogin }) => {
   const [isLogin, setIsLogin] = useState(true);
@@ -17,8 +18,8 @@ const AuthPage = ({ onLogin }) => {
 
     try {
       // Building the URL with query parameters as required by the backend
-      const baseUrl = 'http://localhost:3000'; // Update this to match your backend URL
-      const endpoint = isLogin ? '/user/login' : '/user/register'; // Changed from /users/ to /user/
+      const baseUrl = config.apiUrl;
+      const endpoint = isLogin ? '/user/login' : '/user/register'; 
       
       let url = new URL(baseUrl + endpoint);
       

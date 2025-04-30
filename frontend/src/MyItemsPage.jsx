@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaUser, FaBox, FaShoppingBag } from 'react-icons/fa';
+import config from './config';
 
 const MyItemsPage = ({ user }) => {
   const [items, setItems] = useState([]);
@@ -15,7 +16,7 @@ const MyItemsPage = ({ user }) => {
   const fetchUserItems = async (userId) => {
     try {
       setLoading(true);
-      const baseUrl = 'http://localhost:3000';
+      const baseUrl = config.apiUrl;
       
       // First get the user's transactions
       const response = await fetch(`${baseUrl}/transaction/user/${userId}`);

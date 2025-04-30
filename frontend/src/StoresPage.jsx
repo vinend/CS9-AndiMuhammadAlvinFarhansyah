@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaStore, FaShoppingBag, FaMapMarkerAlt } from 'react-icons/fa';
+import config from './config';
 
 const StoresPage = ({ user, onAddToCart }) => {
   const [stores, setStores] = useState([]);
@@ -36,7 +37,7 @@ const StoresPage = ({ user, onAddToCart }) => {
   const fetchStores = async () => {
     try {
       setLoading(true);
-      const baseUrl = 'http://localhost:3000';
+      const baseUrl = config.apiUrl;
       
       const response = await fetch(`${baseUrl}/store/getAll`);
       if (!response.ok) {
@@ -66,7 +67,7 @@ const StoresPage = ({ user, onAddToCart }) => {
   const fetchStoreItems = async (storeId) => {
     try {
       setLoading(true);
-      const baseUrl = 'http://localhost:3000';
+      const baseUrl = config.apiUrl;
       
       const response = await fetch(`${baseUrl}/item/byStoreId/${storeId}`);
       if (!response.ok) {

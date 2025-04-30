@@ -8,6 +8,7 @@ import OrdersPage from './OrdersPage';
 import MyItemsPage from './MyItemsPage';
 import Taskbar from './taskbar';
 import Footer from './footer';
+import config from './config';
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -36,8 +37,7 @@ function App() {
 
   const fetchUserData = async (email) => {
     try {
-      const baseUrl = 'http://localhost:3000';
-      const response = await fetch(`${baseUrl}/user/${email}`);
+      const response = await fetch(`${config.apiUrl}/user/${email}`);
       
       if (!response.ok) {
         throw new Error('Failed to fetch user data');

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { FaShoppingCart, FaPlus } from 'react-icons/fa';
+import config from './config';
 
 const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) => {
   const [products, setProducts] = useState([]);
@@ -38,8 +39,8 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
   const fetchProducts = async () => {
     try {
       setLoading(true);
-      const baseUrl = 'http://localhost:3000'; // Updated to match your backend URL
-      const endpoint = selectedCategory ? `/item/byStoreId/${selectedCategory}` : '/item'; // Changed from /items to /item
+      const baseUrl = config.apiUrl;
+      const endpoint = selectedCategory ? `/item/byStoreId/${selectedCategory}` : '/item';
       
       const response = await fetch(baseUrl + endpoint);
       if (!response.ok) {
@@ -62,8 +63,8 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
 
   const fetchStores = async () => {
     try {
-      const baseUrl = 'http://localhost:3000'; // Updated to match your backend URL
-      const response = await fetch(baseUrl + '/store/getAll'); // Changed to match the actual endpoint
+      const baseUrl = config.apiUrl;
+      const response = await fetch(baseUrl + '/store/getAll');
       
       if (!response.ok) {
         throw new Error('Failed to fetch stores');
@@ -143,7 +144,7 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
     }
 
     try {
-      const baseUrl = 'http://localhost:3000';
+      const baseUrl = config.apiUrl;
       
       // Process each cart item as a separate transaction
       const createTransactionPromises = cart.map(async (item) => {

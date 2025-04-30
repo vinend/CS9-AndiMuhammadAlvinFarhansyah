@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import config from './config';
 
 const TopUpPage = ({ user, onBalanceUpdate, onClose }) => {
   const [amount, setAmount] = useState('');
@@ -21,8 +22,8 @@ const TopUpPage = ({ user, onBalanceUpdate, onClose }) => {
     }
 
     try {
-      const baseUrl = 'http://localhost:3000'; // Updated to match your backend URL
-      const endpoint = '/user/topUp'; // Changed from /users/topUp to /user/topUp
+      const baseUrl = config.apiUrl;
+      const endpoint = '/user/topUp';
       
       // Create URL with query parameters as required by the backend
       let url = new URL(baseUrl + endpoint);

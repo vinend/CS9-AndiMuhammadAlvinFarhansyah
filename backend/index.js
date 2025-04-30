@@ -14,7 +14,12 @@ const port = process.env.PORT || 3000;
 
 // Middleware
 app.use(cors({
-  origin: ['https://os.netlabdte.com', 'http://localhost:5173', 'http://localhost:3000', '*'],
+  origin: [
+    'https://cs-9-andi-muhammad-alvin-farhansyah.vercel.app',
+    'https://os.netlabdte.com', 
+    'http://localhost:5173', 
+    'http://localhost:3000'
+  ],
   methods: ['GET', 'POST', 'PUT', 'DELETE'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true,
@@ -68,7 +73,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Start the server
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+// Start the server only in development mode
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(port, () => {
+    console.log(`Server is running on http://localhost:${port}`);
+  });
+}
+
+// Export the app for Vercel serverless deployment
+module.exports = app;

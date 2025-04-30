@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FaShoppingBag, FaBox, FaCheck, FaClock, FaTimes, FaExclamationTriangle } from 'react-icons/fa';
+import { FaShoppingBag, FaBox, FaCheck, FaClock, FaTimes, FaExclamationTriangle, FaQuestion } from 'react-icons/fa';
+import config from './config';
 
 const OrdersPage = ({ user }) => {
   const [orders, setOrders] = useState([]);
@@ -15,7 +16,7 @@ const OrdersPage = ({ user }) => {
   const fetchUserOrders = async (userId) => {
     try {
       setLoading(true);
-      const baseUrl = 'http://localhost:3000';
+      const baseUrl = config.apiUrl;
       
       const response = await fetch(`${baseUrl}/transaction/user/${userId}`);
       if (!response.ok) {
