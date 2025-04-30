@@ -12,19 +12,9 @@ const transactionRoutes = require('./src/routes/transactionRoutes');
 const app = express();
 const port = process.env.PORT || 3000;
 
-// Middleware
-app.use(cors({
-  origin: [
-    'cs-9-andi-muhammad-alvin-farhansyah-8ixwyzw4h.vercel.app',
-    'https://os.netlabdte.com', 
-    'http://localhost:5173', 
-    'http://localhost:3000'
-  ],
-  methods: ['GET', 'POST', 'PUT', 'DELETE'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true,
-  optionsSuccessStatus: 204
-}));
+// Middleware - Allowing all origins with simplified CORS config
+app.use(cors());
+
 app.use(express.json());
 
 // Root route
