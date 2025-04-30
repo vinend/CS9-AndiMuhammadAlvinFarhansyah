@@ -42,7 +42,10 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
       const baseUrl = config.apiUrl;
       const endpoint = selectedCategory ? `/item/byStoreId/${selectedCategory}` : '/item';
       
-      const response = await fetch(baseUrl + endpoint);
+      // Use URL constructor to properly join URL segments
+      const url = new URL(endpoint, baseUrl);
+      
+      const response = await fetch(url);
       if (!response.ok) {
         throw new Error('Failed to fetch products');
       }
@@ -64,7 +67,10 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
   const fetchStores = async () => {
     try {
       const baseUrl = config.apiUrl;
-      const response = await fetch(baseUrl + '/store/getAll');
+      // Use URL constructor to properly join URL segments
+      const url = new URL('/store/getAll', baseUrl);
+      
+      const response = await fetch(url);
       
       if (!response.ok) {
         throw new Error('Failed to fetch stores');
@@ -148,7 +154,10 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
       
       // Process each cart item as a separate transaction
       const createTransactionPromises = cart.map(async (item) => {
-        const response = await fetch(`${baseUrl}/transaction/create`, {
+        // Use URL constructor for consistent URL handling
+        const createUrl = new URL('/transaction/create', baseUrl);
+        
+        const response = await fetch(createUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -176,7 +185,10 @@ const ProductsPage = ({ user, onTopUpClick, cart, setCart, onCheckoutSuccess }) 
       // Process the payment for each created transaction
       const payTransactionPromises = results.map(async (result) => {
         if (result.success && result.payload) {
-          const payResponse = await fetch(`${baseUrl}/transaction/pay/${result.payload.id}`, {
+          // Use URL constructor for the payment endpoint
+          const payUrl = new URL(`/transaction/pay/${result.payload.id}`, baseUrl);
+          
+          const payResponse = await fetch(payUrl, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

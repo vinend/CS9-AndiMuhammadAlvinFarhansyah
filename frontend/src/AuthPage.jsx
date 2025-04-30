@@ -17,12 +17,14 @@ const AuthPage = ({ onLogin }) => {
     setError('');
 
     try {
-      // Building the URL with query parameters as required by the backend
+      // Building the URL properly with URL constructor
       const baseUrl = config.apiUrl;
       const endpoint = isLogin ? '/user/login' : '/user/register'; 
       
-      let url = new URL(baseUrl + endpoint);
+      // Create the base URL
+      const url = new URL(endpoint, baseUrl);
       
+      // Add query parameters
       if (isLogin) {
         url.searchParams.append('email', email);
         url.searchParams.append('password', password);
